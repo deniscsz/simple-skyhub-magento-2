@@ -58,7 +58,7 @@ class Data extends AbstractHelper
         $apiKey  = $this->getApiKey();
 
         /** @var \SkyHub\Api $api */
-        $api = new SkyHub\Api($email, $apiKey);
+        $api = new \SkyHub\Api($email, $apiKey);
         return $this->_skyhubApi = $api;
     }
 

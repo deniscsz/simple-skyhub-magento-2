@@ -29,6 +29,10 @@ class Orders
      */
     public function execute()
     {
+        if (!$this->helper->isEnabled()) {
+            return $this;
+        }
+            
         $this->logger->addInfo("Cronjob Orders is executed.");
     }
 }

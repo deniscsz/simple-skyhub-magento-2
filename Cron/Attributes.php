@@ -29,11 +29,12 @@ class Attributes
      */
     public function execute()
     {
+        if (!$this->helper->isEnabled()) {
+            return $this;
+        }
+
         echo "Testing API SDK" . PHP_EOL;
-        echo "Enabled: ". $helper->isEnabled() . PHP_EOL;
-        echo "GetApiKey: ". $helper->getApiKey() . PHP_EOL;
-        echo "GetApiEmail: ". $helper->getApiEmail() . PHP_EOL;
-        echo "Get_SKYHUB_API: ". \get_class($helper->getSkyhubApi()) . PHP_EOL;
+        echo "Get_SKYHUB_API: ". \get_class($this->helper->getSkyhubApi()) . PHP_EOL;
         echo "Testing API SDK COMPLETE" . PHP_EOL;
         $this->logger->addInfo("Cronjob Attributes is executed.");
     }
