@@ -3,7 +3,7 @@
 
 namespace Resultate\Skyhub\Cron;
 
-class Orders
+class Status
 {
     protected $logger;
     protected $helper;

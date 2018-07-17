@@ -1,6 +1,9 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
 	<group id="default">
+		<job instance="Resultate\Skyhub\Cron\Status" method="execute" name="resultate_skyhub_status">
+			<schedule>*/10 * * * *</schedule>
+		</job>
 		<job instance="Resultate\Skyhub\Cron\Orders" method="execute" name="resultate_skyhub_orders">
 			<schedule>*/10 * * * *</schedule>
 		</job>

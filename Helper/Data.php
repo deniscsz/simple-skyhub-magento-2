@@ -14,6 +14,7 @@ class Data extends AbstractHelper
     const XML_SKYHUB_ACTIVED = "skyhub/options/active";
     const XML_SKYHUB_API_EMAIL = "skyhub/options/email";
     const XML_SKYHUB_API_KEY = "skyhub/options/api_key";
+    const XML_SKYHUB_ATTRIBUTE_SET_TO_SYNC = "skyhub/options/attribute_set_to_sync";
     const XML_SKYHUB_ATTRIBUTES_TO_SYNC = "skyhub/options/attributes_to_sync";
     
     protected $_skyhubApi = null;
@@ -39,6 +40,11 @@ class Data extends AbstractHelper
     public function getApiEmail()
     {
         return $this->getConfig(self::XML_SKYHUB_API_EMAIL);
+    }
+
+    public function getAttributeSetToSync()
+    {
+        return $this->getConfig(self::XML_SKYHUB_ATTRIBUTE_SET_TO_SYNC);
     }
 
     public function getAttributesToSync()

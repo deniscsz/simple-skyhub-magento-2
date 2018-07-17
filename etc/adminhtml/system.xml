@@ -120,6 +120,12 @@
 					<comment>Selecione os atributos que serão sincronizados com a SkyHub</comment>
 					<source_model>Resultate\Skyhub\Model\Config\Source\AttributesToSync</source_model>
 				</field>
+
+				<field id="attribute_set_to_sync" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="99" translate="label" type="select">
+					<label>Attribute Set para Integração</label>
+					<comment>Selecione o Grupo de atributo que será utilizado para gerar os atributos abaixo.</comment>
+					<source_model>Resultate\Skyhub\Model\Config\Source\AttributeSetToSync</source_model>
+				</field>
 			</group>
 		</section>
 	</system>
