@@ -13,6 +13,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
         SchemaSetupInterface $setup,
         ModuleContextInterface $context
     ) {
+        $installer = $setup;
+        $installer->startSetup();
+
         $installer->getConnection()->modifyColumn(
             $setup->getTable('resultate_skyhub_skyhubjob'),
             'created_at',
@@ -32,5 +35,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'default' => null
             ]
         );
+        
+        $installer->endSetup();
     }
 }

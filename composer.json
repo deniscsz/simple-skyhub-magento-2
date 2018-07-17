@@ -10,7 +10,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "deniscsz/skyhub-php": "dev-master"
+    },
     "autoload": {
         "files": [
             "registration.php"
