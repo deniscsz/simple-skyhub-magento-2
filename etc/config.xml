@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<payment>
+			<marketplace_cc>
+				<active>1</active>
+				<model>Resultate\Skyhub\Model\Payment\Marketplace_Cc</model>
+				<order_status>pending</order_status>
+				<title>Marketplace_Cc</title>
+				<allowspecific>0</allowspecific>
+				<group>offline</group>
+			</marketplace_cc>
+			<marketplace_boleto>
+				<active>1</active>
+				<model>Resultate\Skyhub\Model\Payment\Marketplace_Boleto</model>
+				<order_status>pending</order_status>
+				<title>Marketplace_Boleto</title>
+				<allowspecific>0</allowspecific>
+				<group>offline</group>
+			</marketplace_boleto>
+		</payment>
+		<carriers>
+			<marketplace>
+				<model>Resultate\Skyhub\Model\Carrier\Marketplace</model>
+				<active>0</active>
+				<title>Marketplace</title>
+				<name>Marketplace</name>
+				<price>0.00</price>
+				<specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+				<sallowspecific>0</sallowspecific>
+			</marketplace>
+		</carriers>
+		<skyhub>
+			<options>
+				<api_key/>
+				<email/>
+				<active/>
+				<attributes_to_sync/>
+			</options>
+		</skyhub>
+	</default>
+</config>

@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="Resultate_Skyhub::SkyhubJob" sortOrder="10" title="SkyhubJob">
+					<resource id="Resultate_Skyhub::SkyhubJob_save" sortOrder="10" title="Save SkyhubJob"/>
+					<resource id="Resultate_Skyhub::SkyhubJob_delete" sortOrder="20" title="Delete SkyhubJob"/>
+					<resource id="Resultate_Skyhub::SkyhubJob_update" sortOrder="30" title="Update SkyhubJob"/>
+					<resource id="Resultate_Skyhub::SkyhubJob_view" sortOrder="40" title="View SkyhubJob"/>
+				</resource>
+				<resource id="Magento_Backend::stores">
+					<resource id="Magento_Backend::stores_settings">
+						<resource id="Magento_Config::config">
+							<resource id="Resultate_Skyhub::config_resultate_skyhub" title="skyhub"/>
+						</resource>
+					</resource>
+				</resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

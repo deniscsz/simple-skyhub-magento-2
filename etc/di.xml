@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Resultate\Skyhub\Api\SkyhubJobRepositoryInterface" type="Resultate\Skyhub\Model\SkyhubJobRepository"/>
+	<preference for="Resultate\Skyhub\Api\Data\SkyhubJobInterface" type="Resultate\Skyhub\Model\SkyhubJob"/>
+	<preference for="Resultate\Skyhub\Api\Data\SkyhubJobSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<virtualType name="Resultate\Skyhub\Model\ResourceModel\SkyhubJob\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">resultate_skyhub_skyhubjob</argument>
+			<argument name="resourceModel" xsi:type="string">Resultate\Skyhub\Model\ResourceModel\SkyhubJob\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="resultate_skyhub_skyhubjob_grid_data_source" xsi:type="string">Resultate\Skyhub\Model\ResourceModel\SkyhubJob\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+</config>

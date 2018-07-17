@@ -1,0 +1,22 @@
+{
+    "name": "resultate/module-skyhub",
+    "description": "Skyhub Integration",
+    "type": "magento2-module",
+    "license": "proprietary",
+    "authors": [
+        {
+            "email": "denis.spalenza@resultate.com.br",
+            "name": "Denis Colli Spalenza"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Resultate\\Skyhub\\": ""
+        }
+    }
+}

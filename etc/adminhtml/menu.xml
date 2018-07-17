@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+		<add id="Resultate::top_level" module="Resultate_Skyhub" resource="Magento_Backend::content" sortOrder="9999" title="Resultate"/>
+		<add action="resultate_skyhub/skyhubjob/index" id="Resultate_Skyhub::resultate_skyhub_skyhubjob" module="Resultate_Skyhub" parent="Resultate::top_level" resource="Magento_Backend::content" sortOrder="9999" title="SkyhubJob"/>
+	</menu>
+</config>

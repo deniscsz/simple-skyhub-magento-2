@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="catalog_product_save_after">
+		<observer instance="Resultate\Skyhub\Observer\Catalog\ProductSaveAfter" name="resultate_skyhub_observer_catalog_productsaveafter_catalog_product_save_after"/>
+	</event>
+	<event name="cataloginventory_stock_item_save_after">
+		<observer instance="Resultate\Skyhub\Observer\Cataloginventory\StockItemSaveAfter" name="resultate_skyhub_observer_cataloginventory_stockitemsaveafter_cataloginventory_stock_item_save_after"/>
+	</event>
+	<event name="sales_order_invoice_pay">
+		<observer instance="Resultate\Skyhub\Observer\Sales\OrderInvoicePay" name="resultate_skyhub_observer_sales_orderinvoicepay_sales_order_invoice_pay"/>
+	</event>
+	<event name="order_cancel_after">
+		<observer instance="Resultate\Skyhub\Observer\Order\CancelAfter" name="resultate_skyhub_observer_order_cancelafter_order_cancel_after"/>
+	</event>
+	<event name="sales_order_shipment_save_after">
+		<observer instance="Resultate\Skyhub\Observer\Sales\OrderShipmentSaveAfter" name="resultate_skyhub_observer_sales_ordershipmentsaveafter_sales_order_shipment_save_after"/>
+	</event>
+	<event name="sales_order_payment_refund">
+		<observer instance="Resultate\Skyhub\Observer\Sales\OrderPaymentRefund" name="resultate_skyhub_observer_sales_orderpaymentrefund_sales_order_payment_refund"/>
+	</event>
+</config>
