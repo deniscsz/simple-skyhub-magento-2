@@ -3,7 +3,10 @@
 
 namespace Resultate\Skyhub\Observer\Sales;
 
-class OrderShipmentSaveAfter implements \Magento\Framework\Event\ObserverInterface
+use Resultate\Skyhub\Observer\AbstractObserver;
+use Resultate\Skyhub\Model\SkyhubJob;
+
+class OrderShipmentSaveAfter extends AbstractObserver
 {
 
     /**
@@ -15,6 +18,16 @@ class OrderShipmentSaveAfter implements \Magento\Framework\Event\ObserverInterfa
     public function execute(
         \Magento\Framework\Event\Observer $observer
     ) {
-        //Your observer code
+        if (!$this->helper->isEnabled()) {
+            return $this;
+        }
+
+        $shipment = $observer->getData('shipment');
+        $this->createJob(
+            SkyhubJob::ENTITY_TYPE_SALES_ORDER_SHIPMENT_SAVE, 
+            $shipment->getData('order_id')
+        );
+
+        return $this;
     }
 }

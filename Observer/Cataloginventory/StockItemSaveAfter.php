@@ -1,9 +1,11 @@
 <?php
 
-
 namespace Resultate\Skyhub\Observer\Cataloginventory;
 
-class StockItemSaveAfter implements \Magento\Framework\Event\ObserverInterface
+use Resultate\Skyhub\Observer\AbstractObserver;
+use Resultate\Skyhub\Model\SkyhubJob;
+
+class StockItemSaveAfter extends AbstractObserver
 {
 
     /**
@@ -15,6 +17,16 @@ class StockItemSaveAfter implements \Magento\Framework\Event\ObserverInterface
     public function execute(
         \Magento\Framework\Event\Observer $observer
     ) {
-        //Your observer code
+        if (!$this->helper->isEnabled()) {
+            return $this;
+        }
+
+        $stockItem = $observer->getData('item');
+        $this->createJob(
+            SkyhubJob::ENTITY_TYPE_CATALOGINVENTORY_STOCK_ITEM_SAVE, 
+            $stockItem->getId()
+        );
+
+        return $this;
     }
 }

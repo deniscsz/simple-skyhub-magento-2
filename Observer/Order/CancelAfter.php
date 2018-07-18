@@ -1,9 +1,11 @@
 <?php
 
-
 namespace Resultate\Skyhub\Observer\Order;
 
-class CancelAfter implements \Magento\Framework\Event\ObserverInterface
+use Resultate\Skyhub\Observer\AbstractObserver;
+use Resultate\Skyhub\Model\SkyhubJob;
+
+class CancelAfter extends AbstractObserver
 {
 
     /**
@@ -15,6 +17,16 @@ class CancelAfter implements \Magento\Framework\Event\ObserverInterface
     public function execute(
         \Magento\Framework\Event\Observer $observer
     ) {
-        //Your observer code
+        if (!$this->helper->isEnabled()) {
+            return $this;
+        }
+
+        $order = $observer->getData('order');
+        $this->createJob(
+            SkyhubJob::ENTITY_TYPE_ORDER_CANCEL, 
+            $order->getId()
+        );
+
+        return $this;
     }
 }

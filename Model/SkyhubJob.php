@@ -9,6 +9,13 @@ class SkyhubJob extends \Magento\Framework\Model\AbstractModel implements Skyhub
 {
     protected $_eventPrefix = 'resultate_skyhub_skyhubjob';
 
+    const   ENTITY_TYPE_CATALOG_PRODUCT_SAVE             = 'catalog_product_save',
+            ENTITY_TYPE_CATALOGINVENTORY_STOCK_ITEM_SAVE = 'cataloginventory_stock_item_save',
+            ENTITY_TYPE_ORDER_CANCEL                     = 'order_cancel',
+            ENTITY_TYPE_SALES_ORDER_INVOICE_PAY          = 'sales_order_invoice_pay',
+            ENTITY_TYPE_SALES_ORDER_PAYMENT_REFUND       = 'sales_order_payment_refund',
+            ENTITY_TYPE_SALES_ORDER_SHIPMENT_SAVE        = 'sales_order_shipment_save';
+            
     /**
      * @return void
      */

@@ -3,7 +3,10 @@
 
 namespace Resultate\Skyhub\Observer\Sales;
 
-class OrderPaymentRefund implements \Magento\Framework\Event\ObserverInterface
+use Resultate\Skyhub\Observer\AbstractObserver;
+use Resultate\Skyhub\Model\SkyhubJob;
+
+class OrderPaymentRefund extends AbstractObserver
 {
 
     /**
@@ -15,6 +18,16 @@ class OrderPaymentRefund implements \Magento\Framework\Event\ObserverInterface
     public function execute(
         \Magento\Framework\Event\Observer $observer
     ) {
-        //Your observer code
+        if (!$this->helper->isEnabled()) {
+            return $this;
+        }
+
+        $creditmemo = $observer->getData('creditmemo');
+        $this->createJob(
+            SkyhubJob::ENTITY_TYPE_SALES_ORDER_PAYMENT_REFUND, 
+            $creditmemo->getData('order_id')
+        );
+
+        return $this;
     }
 }

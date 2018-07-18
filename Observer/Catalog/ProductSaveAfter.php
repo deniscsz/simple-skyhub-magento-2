@@ -1,11 +1,13 @@
 <?php
 
-
 namespace Resultate\Skyhub\Observer\Catalog;
 
-class ProductSaveAfter implements \Magento\Framework\Event\ObserverInterface
-{
+use Resultate\Skyhub\Observer\AbstractObserver;
+use Resultate\Skyhub\Model\SkyhubJob;
 
+class ProductSaveAfter extends AbstractObserver
+{
+    
     /**
      * Execute observer
      *
@@ -15,6 +17,16 @@ class ProductSaveAfter implements \Magento\Framework\Event\ObserverInterface
     public function execute(
         \Magento\Framework\Event\Observer $observer
     ) {
-        //Your observer code
+        if (!$this->helper->isEnabled()) {
+            return $this;
+        }
+
+        $product = $observer->getData('product');
+        $this->createJob(
+            SkyhubJob::ENTITY_TYPE_CATALOG_PRODUCT_SAVE, 
+            $product->getId()
+        );
+
+        return $this;
     }
 }
