@@ -33,13 +33,18 @@ abstract class AbstractObserver implements ObserverInterface
     {
         $this->logger->addInfo("Creatind Job");
 
-        $skyhubJob = $this->_objectManager->create("Resultate\Skyhub\Model\SkyhubJob");
-        $skyhubJob->setEntityType($entityType);
-        $skyhubJob->setEntityId($entityId);
-        $skyhubJob->save();
+        try{
+            $skyhubJob = $this->_objectManager->create("Resultate\Skyhub\Model\SkyhubJob");
+            $skyhubJob->setEntityType($entityType);
+            $skyhubJob->setEntityId($entityId);
+            $skyhubJob->save();
 
-        $this->logger->addInfo("Job Created");
-        
+            $this->logger->addInfo("Job Created" . $skyhubJob->getId());
+        }catch(Exception $e){
+            $this->logger->addInfo("Error to Create Job");
+            $this->logger->critical($e);
+        }
+    
         return $this;
     }
 
