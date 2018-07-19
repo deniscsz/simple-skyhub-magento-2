@@ -29,8 +29,10 @@ abstract class AbstractObserver implements ObserverInterface
         $this->_objectManager = $objectManager;
     }
 
-    protected function createJob($entityType, $entityId)
-    {
+    protected function createJob(
+        $entityType, 
+        $entityId
+    ) {
         $this->logger->addInfo("Creatind Job");
 
         try{

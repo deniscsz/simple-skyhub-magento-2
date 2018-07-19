@@ -17,6 +17,12 @@
 				<item name="class" xsi:type="string">primary</item>
 				<item name="url" xsi:type="string">*/*/new</item>
 			</item>
+			<item name="syncAttr" xsi:type="array">
+				<item name="name" xsi:type="string">sync_attr</item>
+				<item name="label" translate="true" xsi:type="string">Add Sync Attributes Job</item>
+				<item name="class" xsi:type="string">primary</item>
+				<item name="url" xsi:type="string">*/*/attr</item>
+			</item>
 		</item>
 	</argument>
 	<dataSource name="resultate_skyhub_skyhubjob_grid_data_source">

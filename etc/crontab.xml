@@ -1,16 +1,25 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
 	<group id="default">
-		<job instance="Resultate\Skyhub\Cron\Status" method="execute" name="resultate_skyhub_status">
+		<job instance="Resultate\Skyhub\Cron\Catalog\Attributes" method="execute" name="resultate_skyhub_catalog_attributes">
 			<schedule>*/10 * * * *</schedule>
 		</job>
-		<job instance="Resultate\Skyhub\Cron\Orders" method="execute" name="resultate_skyhub_orders">
+		<job instance="Resultate\Skyhub\Cron\Catalog\Product\Products" method="execute" name="resultate_skyhub_catalog_products">
 			<schedule>*/10 * * * *</schedule>
 		</job>
-		<job instance="Resultate\Skyhub\Cron\Products" method="execute" name="resultate_skyhub_products">
+		<job instance="Resultate\Skyhub\Cron\Catalog\Product\StockItems" method="execute" name="resultate_skyhub_catalog_product_stockitems">
 			<schedule>*/10 * * * *</schedule>
 		</job>
-		<job instance="Resultate\Skyhub\Cron\Attributes" method="execute" name="resultate_skyhub_attributes">
+		<job instance="Resultate\Skyhub\Cron\Order\Status\Canceled" method="execute" name="resultate_skyhub_order_status_canceled">
+			<schedule>*/10 * * * *</schedule>
+		</job>
+		<job instance="Resultate\Skyhub\Cron\Order\Status\Invoiced" method="execute" name="resultate_skyhub_order_status_invoiced">
+			<schedule>*/10 * * * *</schedule>
+		</job>
+		<job instance="Resultate\Skyhub\Cron\Order\Status\Refunded" method="execute" name="resultate_skyhub_order_status_refunded">
+			<schedule>*/10 * * * *</schedule>
+		</job>
+		<job instance="Resultate\Skyhub\Cron\Order\Status\Shipmed" method="execute" name="resultate_skyhub_order_status_shipmed">
 			<schedule>*/10 * * * *</schedule>
 		</job>
 	</group>

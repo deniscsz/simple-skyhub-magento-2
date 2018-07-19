@@ -14,7 +14,8 @@ class SkyhubJob extends \Magento\Framework\Model\AbstractModel implements Skyhub
             ENTITY_TYPE_ORDER_CANCEL                     = 'order_cancel',
             ENTITY_TYPE_SALES_ORDER_INVOICE_PAY          = 'sales_order_invoice_pay',
             ENTITY_TYPE_SALES_ORDER_PAYMENT_REFUND       = 'sales_order_payment_refund',
-            ENTITY_TYPE_SALES_ORDER_SHIPMENT_SAVE        = 'sales_order_shipment_save';
+            ENTITY_TYPE_SALES_ORDER_SHIPMENT_SAVE        = 'sales_order_shipment_save',
+            ENTITY_TYPE_SYNC_ATTRIBUTES                  = 'sync_attributes';
             
     /**
      * @return void
