@@ -2,18 +2,68 @@
 
 namespace Resultate\Skyhub\Cron\Order\Status;
 
-use Resultate\Skyhub\Cron\Order\AbtractOrderCron;
+use Resultate\Skyhub\Cron\Order\AbstractOrderCron;
 use Resultate\Skyhub\Model\SkyhubJob;
 
-class Shipmed extends AbtractOrderCron
+class Shipmed extends AbstractOrderCron
 {
     protected function processJob(SkyhubJob $job)
     {
-        
+        try{
+            $orderId = $job->getEntityId();
+            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+
+            if($order->hasData('skyhub_id'))
+            {
+                $skyhubId = $order->getData('skyhub_id');
+                $items    = $this->getItems($order);
+                
+                /**
+                 * @todo shipping data
+                 */
+                $code     = "BR1321830198302DR";
+                $carrier  = "Correios";
+                $method   = "SEDEX";
+                $url      = "www.correios.com.br";
+
+                $response = $this->getRequestHandler()->shipment(
+                    $skyhubId,
+                    $items,
+                    $code,
+                    $carrier,
+                    $method,
+                    $url
+                );
+
+                if ($response->success())
+                {
+                    echo 'Order Shipmed: ' . $skyhubId . PHP_EOL;
+                }
+            }
+        }catch(\Exception $e){
+            echo 'Error: ' . $orderId . PHP_EOL;
+            print_r($e->getMessage());
+            $this->logger->critical($e);
+        }
+    }
+
+    private function getItems($order)
+    {
+        $response = array();
+        $orderItems = $order->getAllItems();
+        foreach($orderItems as $item)
+        {
+            $response[] = array(
+                "sku" => $item->getData('sku'),
+                "qty" => $item->getData('qty_ordered')
+            );
+        }
+
+        return $response;
     }
 
     protected function setJobType()
     {
-        return $this->jobType = SkyhubJob::ENTITY_TYPE_SALES_ORDER_SHIPMENT_SAVE;
+        return $this->jobType = SkyhubJob::ENTITY_TYPE_SALES_ORDER_SHIPMED;
     }
 }

@@ -11,11 +11,17 @@ class Data extends AbstractHelper
     /**
      * Extension's system configurations path
      */
-    const XML_SKYHUB_ACTIVED = "skyhub/options/active";
-    const XML_SKYHUB_API_EMAIL = "skyhub/options/email";
-    const XML_SKYHUB_API_KEY = "skyhub/options/api_key";
-    const XML_SKYHUB_ATTRIBUTE_SET_TO_SYNC = "skyhub/options/attribute_set_to_sync";
-    const XML_SKYHUB_ATTRIBUTES_TO_SYNC = "skyhub/options/attributes_to_sync";
+    const XML_SKYHUB_ACTIVED                = "skyhub/options/active";
+    const XML_SKYHUB_API_EMAIL              = "skyhub/options/email";
+    const XML_SKYHUB_API_KEY                = "skyhub/options/api_key";
+    const XML_SKYHUB_STATUS_PENDING         = "skyhub/options/status_pending";
+    const XML_SKYHUB_STATUS_INVOICED        = "skyhub/options/status_invoiced";
+    const XML_SKYHUB_STATUS_CANCELED        = "skyhub/options/status_canceled";
+    const XML_SKYHUB_STATUS_REFUNDED        = "skyhub/options/status_refunded";
+    const XML_SKYHUB_STATUS_SHIPMED         = "skyhub/options/status_shipmed";
+    const XML_SKYHUB_STATUS_DELIVERED       = "skyhub/options/status_delivered";
+    const XML_SKYHUB_ATTRIBUTE_SET_TO_SYNC  = "skyhub/options/attribute_set_to_sync";
+    const XML_SKYHUB_ATTRIBUTES_TO_SYNC     = "skyhub/options/attributes_to_sync";
     
     protected $_skyhubApi = null;
 
@@ -40,6 +46,36 @@ class Data extends AbstractHelper
     public function getApiEmail()
     {
         return $this->getConfig(self::XML_SKYHUB_API_EMAIL);
+    }
+
+    public function getStatusPending()
+    {
+        return $this->getConfig(self::XML_SKYHUB_STATUS_PENDING);
+    }
+
+    public function getStatusInvoiced()
+    {
+        return $this->getConfig(self::XML_SKYHUB_STATUS_INVOICED);
+    }
+
+    public function getStatusCanceled()
+    {
+        return $this->getConfig(self::XML_SKYHUB_STATUS_CANCELED);
+    }
+
+    public function getStatusRefunded()
+    {
+        return $this->getConfig(self::XML_SKYHUB_STATUS_REFUNDED);
+    }
+
+    public function getStatusShipmed()
+    {
+        return $this->getConfig(self::XML_SKYHUB_STATUS_SHIPMED);
+    }
+
+    public function getStatusDelivered()
+    {
+        return $this->getConfig(self::XML_SKYHUB_STATUS_DELIVERED);
     }
 
     public function getAttributeSetToSync()
@@ -70,4 +106,36 @@ class Data extends AbstractHelper
             return $this->_setSkyhubApi();
         }
     }
+
+    public function mask($val, $mask)
+    {
+        $maskared = '';
+        $k = 0;
+        for($i = 0; $i<=strlen($mask)-1; $i++)
+        {
+            if($mask[$i] == '#')
+            {
+                if(isset($val[$k])){
+                    $maskared .= $val[$k++];
+                }
+            } else {
+                if(isset($mask[$i])){
+                    $maskared .= $mask[$i];
+                }
+            }
+        }
+        return $maskared;
+    }
+
+    public function getFormatedTaxVat($taxvat)
+    {
+        $taxvat = preg_replace( '/[^0-9]/', '', $taxvat );
+        if(strlen($taxvat) == 11)
+        {
+            return $this->mask($taxvat, '###.###.###-##');
+        }else{
+            return $this->mask($taxvat, '##.###.###/####-##');
+        }
+    }
+
 }

@@ -22,5 +22,11 @@
 		<job instance="Resultate\Skyhub\Cron\Order\Status\Shipmed" method="execute" name="resultate_skyhub_order_status_shipmed">
 			<schedule>*/10 * * * *</schedule>
 		</job>
+		<job instance="Resultate\Skyhub\Cron\Order\Status\Delivered" method="execute" name="resultate_skyhub_order_status_delivered">
+			<schedule>*/10 * * * *</schedule>
+		</job>
+		<job instance="Resultate\Skyhub\Cron\Order\Import\Create" method="execute" name="resultate_skyhub_order_import_create">
+			<schedule>*/10 * * * *</schedule>
+		</job>
 	</group>
 </config>

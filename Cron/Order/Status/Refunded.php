@@ -2,18 +2,13 @@
 
 namespace Resultate\Skyhub\Cron\Order\Status;
 
-use Resultate\Skyhub\Cron\Order\AbtractOrderCron;
 use Resultate\Skyhub\Model\SkyhubJob;
+use Resultate\Skyhub\Cron\Order\Status\Canceled;
 
-class Refunded extends AbtractOrderCron
+class Refunded extends Canceled
 {
-    protected function processJob(SkyhubJob $job)
-    {
-        
-    }
-
     protected function setJobType()
     {
-        return $this->jobType = SkyhubJob::ENTITY_TYPE_SALES_ORDER_PAYMENT_REFUND;
+        return $this->jobType = SkyhubJob::ENTITY_TYPE_SALES_ORDER_REFUNDED;
     }
 }

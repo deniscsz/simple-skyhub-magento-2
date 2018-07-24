@@ -24,7 +24,7 @@ class StockItemSaveAfter extends AbstractObserver
         $stockItem = $observer->getData('item');
         $this->createJob(
             SkyhubJob::ENTITY_TYPE_CATALOGINVENTORY_STOCK_ITEM_SAVE, 
-            $stockItem->getId()
+            $stockItem->getData('product_id')
         );
 
         return $this;

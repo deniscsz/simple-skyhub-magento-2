@@ -2,10 +2,10 @@
 
 namespace Resultate\Skyhub\Cron\Catalog;
 
-use Resultate\Skyhub\Cron\AbstractCron;
+use Resultate\Skyhub\Cron\Catalog\AbstractCatalogCron;
 use Resultate\Skyhub\Model\SkyhubJob;
 
-class Attributes extends AbstractCron
+class Attributes extends AbstractCatalogCron
 {
     protected function processJob(SkyhubJob $job)
     {
@@ -22,24 +22,17 @@ class Attributes extends AbstractCron
                     $attrOptionsLabel
                 );
                 
-                if ($response->success()) {
+                if ($response->success())
+                {
                     echo 'Attribute Imported: '. $attributeLabel . PHP_EOL;
                 }
             }
-
-            $job->setExecutedAt($this->date->gmtDate());
-            $job->save();
 
         }catch(\Exception $e){
             echo 'Error: '. $attributeLabel . PHP_EOL;
             print_r($e->getMessage());
             $this->logger->critical($e);
         }
-    }
-
-    private function getAttributesToSync()
-    {
-        return explode("," , $this->helper->getAttributesToSync());
     }
 
     private function getAttributeModel($attributeCode)

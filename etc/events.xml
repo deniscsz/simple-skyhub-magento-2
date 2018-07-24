@@ -6,16 +6,11 @@
 	<event name="cataloginventory_stock_item_save_after">
 		<observer instance="Resultate\Skyhub\Observer\Cataloginventory\StockItemSaveAfter" name="resultate_skyhub_observer_cataloginventory_stockitemsaveafter_cataloginventory_stock_item_save_after"/>
 	</event>
-	<event name="sales_order_invoice_pay">
-		<observer instance="Resultate\Skyhub\Observer\Sales\OrderInvoicePay" name="resultate_skyhub_observer_sales_orderinvoicepay_sales_order_invoice_pay"/>
-	</event>
-	<event name="order_cancel_after">
-		<observer instance="Resultate\Skyhub\Observer\Order\CancelAfter" name="resultate_skyhub_observer_order_cancelafter_order_cancel_after"/>
-	</event>
-	<event name="sales_order_shipment_save_after">
-		<observer instance="Resultate\Skyhub\Observer\Sales\OrderShipmentSaveAfter" name="resultate_skyhub_observer_sales_ordershipmentsaveafter_sales_order_shipment_save_after"/>
-	</event>
-	<event name="sales_order_payment_refund">
-		<observer instance="Resultate\Skyhub\Observer\Sales\OrderPaymentRefund" name="resultate_skyhub_observer_sales_orderpaymentrefund_sales_order_payment_refund"/>
+	<event name="sales_order_save_after">
+		<observer instance="Resultate\Skyhub\Observer\Sales\Order\Invoiced" name="resultate_skyhub_observer_sales_order_invoiced"/>
+		<observer instance="Resultate\Skyhub\Observer\Sales\Order\Canceled" name="resultate_skyhub_observer_sales_order_canceled"/>
+		<observer instance="Resultate\Skyhub\Observer\Sales\Order\Refunded" name="resultate_skyhub_observer_sales_order_refunded"/>
+		<observer instance="Resultate\Skyhub\Observer\Sales\Order\Shipmed" name="resultate_skyhub_observer_sales_order_shipmed"/>
+		<observer instance="Resultate\Skyhub\Observer\Sales\Order\Delivered" name="resultate_skyhub_observer_sales_order_delivered"/>
 	</event>
 </config>

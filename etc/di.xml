@@ -9,6 +9,13 @@
 			<argument name="resourceModel" xsi:type="string">Resultate\Skyhub\Model\ResourceModel\SkyhubJob\Collection</argument>
 		</arguments>
 	</virtualType>
+	<virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="skyhub_id" xsi:type="string">sales_order.skyhub_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
 	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
 		<arguments>
 			<argument name="collections" xsi:type="array">

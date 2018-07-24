@@ -16,6 +16,8 @@ class Marketplace extends \Magento\Shipping\Model\Carrier\AbstractCarrier implem
     protected $_rateResultFactory;
 
     protected $_rateMethodFactory;
+    
+    protected $_registry;
 
     /**
      * Constructor
@@ -33,8 +35,10 @@ class Marketplace extends \Magento\Shipping\Model\Carrier\AbstractCarrier implem
         \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
+        \Magento\Framework\Registry $registry,
         array $data = []
     ) {
+        $this->_registry = $registry;
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateMethodFactory = $rateMethodFactory;
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
@@ -49,7 +53,7 @@ class Marketplace extends \Magento\Shipping\Model\Carrier\AbstractCarrier implem
             return false;
         }
 
-        $shippingPrice = $this->getConfigData('price');
+        $shippingPrice = $this->_registry->registry('shipping_price') ? $this->_registry->registry('shipping_price') : $this->getConfigData('price');
 
         $result = $this->_rateResultFactory->create();
 
@@ -82,6 +86,6 @@ class Marketplace extends \Magento\Shipping\Model\Carrier\AbstractCarrier implem
      */
     public function getAllowedMethods()
     {
-        return ['flatrate' => $this->getConfigData('name')];
+        return [$this->_code => $this->getConfigData('name')];
     }
 }

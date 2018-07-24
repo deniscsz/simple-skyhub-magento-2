@@ -15,7 +15,8 @@ abstract class AbstractCron
                 $api,
                 $requestHandler,
                 $date,
-                $_objectManager;
+                $_objectManager,
+                $_storeManager;
     
     /**
      * Constructor
@@ -31,13 +32,15 @@ abstract class AbstractCron
         \Resultate\Skyhub\Helper\Data $helper,
         \Magento\Framework\ObjectManagerInterface $objectmanager,
         \Resultate\Skyhub\Model\ResourceModel\SkyhubJob\CollectionFactory $skyhubJobFactory,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->helper = $helper;
         $this->logger = $logger;
         $this->_objectManager = $objectmanager;
         $this->skyhubJobFactory = $skyhubJobFactory;
         $this->date = $date;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -86,6 +89,8 @@ abstract class AbstractCron
         {
             foreach ($jobCollection as $job) {
                 $this->processJob($job);
+                $job->setExecutedAt($this->date->gmtDate());
+                $job->save();
             }
         } else {
             echo "Nothing to process.". PHP_EOL;

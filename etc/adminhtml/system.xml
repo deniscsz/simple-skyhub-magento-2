@@ -102,29 +102,58 @@
 			<resource>Resultate_Skyhub::config_resultate_skyhub</resource>
 			<group id="options" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
 				<label>Configurações</label>
-				<field id="api_key" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="text">
-					<label>API-KEY</label>
-					<comment>API Key que será passada no Header para autenticação nos endpoints da API.</comment>
-				</field>
-				<field id="email" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="5" translate="label" type="text">
-					<label>E-mail da Conta Skyhub</label>
-					<comment>E-mail associado a conta que irá ser usado na autenticação da API Skyhub</comment>
-				</field>
 				<field id="active" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1" translate="label" type="select">
 					<label>Habilitado</label>
 					<comment>Habilita Integração com Skyhub</comment>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
-				<field id="attributes_to_sync" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="100" translate="label" type="multiselect">
-					<label>Atributos para Integração</label>
-					<comment>Selecione os atributos que serão sincronizados com a SkyHub</comment>
-					<source_model>Resultate\Skyhub\Model\Config\Source\AttributesToSync</source_model>
+				<field id="email" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="5" translate="label" type="text">
+					<label>E-mail da Conta Skyhub</label>
+					<comment>E-mail associado a conta que irá ser usado na autenticação da API Skyhub</comment>
 				</field>
-
-				<field id="attribute_set_to_sync" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="99" translate="label" type="select">
+				<field id="api_key" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="text">
+					<label>API-KEY</label>
+					<comment>API Key que será passada no Header para autenticação nos endpoints da API.</comment>
+				</field>
+				<field id="status_pending" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="105" translate="label" type="select">
+					<label>Status Pendente</label>
+					<comment>Status do pedido pendente.</comment>
+					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+				</field>
+				<field id="status_invoiced" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="110" translate="label" type="select">
+					<label>Status Faturado</label>
+					<comment>Status do pedido Faturado.</comment>
+					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+				</field>
+				<field id="status_canceled" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="115" translate="label" type="select">
+					<label>Status Cancelado</label>
+					<comment>Status do pedido cancelado.</comment>
+					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+				</field>
+				<field id="status_refunded" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="120" translate="label" type="select">
+					<label>Status Reembolsado</label>
+					<comment>Status do pedido reembolsado.</comment>
+					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+				</field>
+				<field id="status_shipmed" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="125" translate="label" type="select">
+					<label>Status Enviado</label>
+					<comment>Status do pedido enviado.</comment>
+					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+				</field>
+				<field id="status_delivered" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="130" translate="label" type="select">
+					<label>Status Entregue</label>
+					<comment>Status do pedido entregue.</comment>
+					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+				</field>
+				<field id="attribute_set_to_sync" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="135" translate="label" type="select">
 					<label>Attribute Set para Integração</label>
 					<comment>Selecione o Grupo de atributo que será utilizado para gerar os atributos abaixo.</comment>
 					<source_model>Resultate\Skyhub\Model\Config\Source\AttributeSetToSync</source_model>
+				</field>
+				<field id="attributes_to_sync" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="140" translate="label" type="multiselect">
+					<label>Atributos para Integração</label>
+					<comment>Selecione os atributos que serão sincronizados com a SkyHub</comment>
+					<source_model>Resultate\Skyhub\Model\Config\Source\AttributesToSync</source_model>
 				</field>
 			</group>
 		</section>
