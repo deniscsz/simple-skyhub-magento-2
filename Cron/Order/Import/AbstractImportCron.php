@@ -73,8 +73,10 @@ abstract class AbstractImportCron{
                 ( $order && !empty($order) && isset( $order['code'] ) ) &&
                 ( $this->_processedQueue < self::MAX_IMPORT_BY_CRON )
             ) {
-                $this->processOrder($order);
-                $this->removeFromQueue($order['code']);
+                if($this->processOrder($order))
+                {
+                    $this->removeFromQueue($order['code']);
+                }
                 $this->_processedQueue++;
 
                 $this->processJobs();

@@ -13,6 +13,7 @@
         <arguments>
             <argument name="columns" xsi:type="array">
                 <item name="skyhub_id" xsi:type="string">sales_order.skyhub_id</item>
+				 <item name="skyhub_channel" xsi:type="string">sales_order.skyhub_channel</item>
             </argument>
         </arguments>
     </virtualType>

@@ -22,7 +22,7 @@
 		<carriers>
 			<marketplace>
 				<model>Resultate\Skyhub\Model\Carrier\Marketplace</model>
-				<active>0</active>
+				<active>1</active>
 				<title>Marketplace</title>
 				<name>Marketplace</name>
 				<price>0.00</price>

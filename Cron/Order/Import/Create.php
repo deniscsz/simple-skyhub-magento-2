@@ -64,6 +64,7 @@ class Create extends AbstractImportCron
                 
                 $order->setEmailSent(0);
                 $order->setSkyhubId($orderData['code']);
+                $order->setSkyhubChannel($orderData['channel']);
             }
             if($order->getEntityId()){
                 echo 'Imported ' . $orderData['code'] . PHP_EOL;
@@ -80,11 +81,12 @@ class Create extends AbstractImportCron
                     $customer->delete();
                 }
             }
+            return true;
         } catch(\Exception $e) {
-            echo 'Error!' . PHP_EOL;
-            print_r($e->getMessage());
+            echo 'Error: '. $e->getMessage() . PHP_EOL;
             $this->logger->critical($e);
         }
+        return false;
     }
 
     private function addItems($items)

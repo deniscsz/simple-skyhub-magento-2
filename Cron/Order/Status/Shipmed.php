@@ -21,10 +21,10 @@ class Shipmed extends AbstractOrderCron
                 /**
                  * @todo shipping data
                  */
-                $code     = "BR1321830198302DR";
-                $carrier  = "Correios";
-                $method   = "SEDEX";
-                $url      = "www.correios.com.br";
+                $code     = $order->getIncrementId();
+                $carrier  = "";
+                $method   = "";
+                $url      = "";
 
                 $response = $this->getRequestHandler()->shipment(
                     $skyhubId,

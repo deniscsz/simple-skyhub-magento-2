@@ -50,6 +50,26 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
         }
+
+        if (version_compare($context->getVersion(), '1.0.3') < 0)
+        {
+            $salesSetup = $this->salesSetupFactory->create(['resourceName' => 'sales_setup', 'setup' => $installer]);
+            $salesSetup->addAttribute(Order::ENTITY, 'skyhub_channel', [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length'=> 50,
+                'visible' => false,
+                'nullable' => true
+            ]);
+            $installer->getConnection()->addColumn(
+                $installer->getTable('sales_order_grid'),
+                'skyhub_channel',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 50,
+                    'comment' =>'Skyhub Channel'
+                ]
+            );
+        }
  
         $installer->endSetup();
     }
