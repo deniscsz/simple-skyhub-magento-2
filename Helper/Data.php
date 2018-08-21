@@ -138,4 +138,41 @@ class Data extends AbstractHelper
         }
     }
 
+    public function getPricesProduct( $product ){
+        $isBundle   = $product->getTypeId() == 'bundle' ? TRUE : FALSE;
+        $price      = 0.0;
+        $finalPrice = 0.0;
+        $weights    = 0.0;
+
+        if( $isBundle && $product->getId() ) {
+
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+            $_productFactory = $objectManager->get('\Magento\Catalog\Model\ProductFactory')->create()->load( $product->getId() );
+
+            $selectionCollection = $product->getTypeInstance(true)
+                                           ->getSelectionsCollection(
+                                                $_productFactory->getTypeInstance(true)->getOptionsIds($_productFactory),
+                                                $_productFactory
+                                            );
+
+            foreach ($selectionCollection as $proselection) {
+                $price        += ( $proselection->getSelectionQty() * $proselection->getPrice() );
+                $finalPrice   += ( $proselection->getSelectionQty() * $proselection->getFinalPrice() );
+                $weights      += ( $proselection->getSelectionQty() * $proselection->getWeight() );
+            }
+
+            $_specialPrice = (float) $product->getSpecialPrice() / 100;
+            $finalPrice = $finalPrice * $_specialPrice;
+        }
+        else {
+            $price        = $product->getPrice();
+            $finalPrice   = $product->getFinalPrice();
+            $weights      = $product->getWeight();
+        }
+
+        $prices = [ 'price' => $price, 'finalPrice' => $finalPrice, 'isBundle' => $isBundle, 'weights' => $weights ];
+
+        return $prices;
+    }
 }

@@ -10,14 +10,15 @@ class Marketplace extends \Magento\Shipping\Model\Carrier\AbstractCarrier implem
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     protected $_code = 'marketplace';
-
     protected $_isFixed = true;
-
     protected $_rateResultFactory;
-
     protected $_rateMethodFactory;
-    
     protected $_registry;
+    protected $_canUseInternal = false;
+    protected $_canUseCheckout = false;
+    protected $_canUseCrontab  = true;
+    
+    private $_areaCode;
 
     /**
      * Constructor
@@ -49,7 +50,7 @@ class Marketplace extends \Magento\Shipping\Model\Carrier\AbstractCarrier implem
      */
     public function collectRates(RateRequest $request)
     {
-        if (!$this->getConfigFlag('active')) {
+        if (!$this->isActive()) {
             return false;
         }
 
@@ -87,5 +88,68 @@ class Marketplace extends \Magento\Shipping\Model\Carrier\AbstractCarrier implem
     public function getAllowedMethods()
     {
         return [$this->_code => $this->getConfigData('name')];
+    }
+
+    /**
+     * Determine whether current carrier enabled for activity
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        $isActive = parent::isActive();
+        
+        if($this->_canUseInternal && $isActive && $this->isAdmin())
+        {
+            return true;
+        }
+        elseif ($this->_canUseCrontab && $isActive && $this->isCrontab())
+        {
+            return true;
+        }
+        elseif ($this->_canUseCheckout && $isActive && $this->isCheckout())
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+
+    }
+
+    private function isAdmin()
+    {
+        return 'adminhtml' === $this->getAreaCode();
+    }
+
+    private function isCheckout()
+    {
+        return !$this->isAdmin();
+    }
+
+    private function isCrontab()
+    {
+        return "crontab" === $this->getAreaCode();
+    }
+
+    private function getAreaCode()
+    {
+        if($this->_areaCode)
+        {
+            return $this->_areaCode;
+        }
+
+        return $this->setAreaCode();
+    }
+
+    private function setAreaCode()
+    {
+        /** @var \Magento\Framework\ObjectManagerInterface $om */
+        $om = \Magento\Framework\App\ObjectManager::getInstance();
+        /** @var \Magento\Framework\App\State $state */
+        $state =  $om->get('Magento\Framework\App\State');
+
+        return $this->_areaCode = $state->getAreaCode();
     }
 }

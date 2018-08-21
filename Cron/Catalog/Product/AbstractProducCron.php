@@ -36,8 +36,9 @@ abstract class AbstractProducCron extends AbstractCatalogCron
                 echo 'Product Imported: '. $sku . PHP_EOL;
             }
         } catch (\Exception $e){
-            echo 'Error: '. $sku . PHP_EOL;
+            echo PHP_EOL . 'Error: '. $sku . PHP_EOL;
             print_r($e->getMessage());
+            echo PHP_EOL;
             $this->logger->critical($e);
         }
     }
@@ -123,7 +124,9 @@ abstract class AbstractProducCron extends AbstractCatalogCron
                             'key'   => $attrCode,
                             'value' => $value
                         );
-                    }else{
+                    }
+                    else
+                    {
                         $response[str_replace('ts_dimensions_','',$attrCode)] = $value;
                     }
                 }
@@ -132,15 +135,25 @@ abstract class AbstractProducCron extends AbstractCatalogCron
 
         if(count($response) && !$specifications)
         {
-            $StockState      = $this->_objectManager->get(\Magento\CatalogInventory\Api\StockStateInterface::class);
-            $response['qty'] = $StockState->getStockQty($product->getId(), $product->getStore()->getWebsiteId());
+            $StockState                    = $this->_objectManager->get(\Magento\CatalogInventory\Api\StockStateInterface::class);
+            $response['qty']               = $StockState->getStockQty($product->getId(), $product->getStore()->getWebsiteId());
+                     
+            $prices                        = $this->helper->getPricesProduct( $product );
+            $response['price']             = $prices['price'];
+            if($product->getTypeId() == 'bundle')
+            {
+                $response['promotional_price'] = $prices['price'];
+            }
+            else
+            {
+                $response['promotional_price'] = $prices['finalPrice'];
+            }
         }
-        
         return $response;
     }
 
     protected function setRequestHandler()
     {
         return $this->requestHandler = $this->getApi()->product();
-    }
+    }   
 }

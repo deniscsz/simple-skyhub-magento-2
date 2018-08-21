@@ -7,12 +7,16 @@ use Magento\Sales\Model\Order;
 
 class Create extends AbstractImportCron
 {
-    private $_quote,
-            $_newCustomer;
+    private $_newCustomer,
+            $_cart,
+            $cartManagementInterface,
+            $cartRepogitoryInterface,
+            $_priceDiff;
             
     protected function processOrder(array $orderData)
     {
-        try{
+        try
+        {
             $orderCollection = $this->_objectManager->get('\Magento\Sales\Model\ResourceModel\Order\CollectionFactory')->create()
                 ->addAttributeToSelect("*")
                 ->addAttributeToFilter("skyhub_id", array("eq" => $orderData['code']));
@@ -20,8 +24,9 @@ class Create extends AbstractImportCron
             if($orderCollection->getSize())
             {
                 $order = $orderCollection->getFirstItem();
-            } else {
-
+            }
+            else
+            {
                 $store     = $this->_storeManager->getStore();
                 $websiteId = $this->_storeManager->getStore()->getWebsiteId();
 
@@ -30,51 +35,66 @@ class Create extends AbstractImportCron
                 {
                     return;
                 }
-
-                $this->_quote = $this->_objectManager->get('\Magento\Quote\Model\QuoteFactory')->create();
-                $this->_quote->setStore($store);
+                //init the quote
+                $this->_cart = $this->createCart();
+                $this->_cart->setStore($store);
+                
                 $customer = $this->customerRepository->getById($customer->getEntityId());
             
-                $this->_quote->setCurrency();
-                $this->_quote->assignCustomer($customer);
-                $this->addItems($orderData['items']);
-                $this->setAddress($orderData['billing_address']);
+                $this->_cart->setCurrency();
+                $this->_cart->assignCustomer($customer);
 
-                if($this->_registry->registry('shipping_price')){
+                $this->addItems($orderData['items']);
+                $this->_priceDiff = round($this->_priceDiff, 2);
+                if($this->_registry->registry('skyhub_tax') !== false)
+                {
+                    $this->_registry->unregister('skyhub_tax');
+                }
+                $this->_registry->register('skyhub_tax', $this->_priceDiff);
+                
+
+                $this->setAddress($orderData['billing_address']);
+                if($this->_registry->registry('shipping_price'))
+                {
                     $this->_registry->unregister('shipping_price');
                 }
                 $this->_registry->register('shipping_price', $orderData['shipping_cost']);
+                
                 // Collect Rates and Set Shipping & Payment Method
-                $shippingAddress = $this->_quote->getShippingAddress();
+                $shippingAddress = $this->_cart->getShippingAddress();
                 $shippingAddress->setCollectShippingRates(true)
                     ->collectShippingRates()
-                    ->setShippingMethod('marketplace_marketplace');
+                    ->setShippingMethod('marketplace_marketplace'); //shipping method                    
 
-                $this->_quote->setPaymentMethod('checkmo');
-                $this->_quote->setInventoryProcessed(false);
-                $this->_quote->save();
-        
                 /**
                  * @todo payment method
                  */
-                $this->_quote->getPayment()->importData(['method' => 'checkmo']);
+                $this->_cart->setPaymentMethod('marketplace_boleto');
+                $this->_cart->setInventoryProcessed(false);
+                $this->_cart->getPayment()->importData(['method' => 'marketplace_boleto']);
 
-                $this->_quote->collectTotals()->save();
-                $order = $this->_objectManager->get('\Magento\Quote\Model\QuoteManagement')->submit($this->_quote);
-                
+                $this->_cart->collectTotals();
+                $this->_cart->save();
+                $this->_cart = $this->cartRepogitoryInterface->get($this->_cart->getId());
+                $order_id = $this->cartManagementInterface->placeOrder($this->_cart->getId());
+
+                $order = $this->_objectManager->create('\Magento\Sales\Model\Order')
+                    ->load($order_id);
                 $order->setEmailSent(0);
                 $order->setSkyhubId($orderData['code']);
                 $order->setSkyhubChannel($orderData['channel']);
             }
-            if($order->getEntityId()){
-                echo 'Imported ' . $orderData['code'] . PHP_EOL;
+
+            if($order->getEntityId())
+            {
+                echo '['.$order_id.'] '.'Imported ' . $orderData['code'] . PHP_EOL;
                 
                 $orderStatus = $this->getOrderStatus($orderData);
 
                 $order->setState($orderStatus, true);
                 $order->setStatus($orderStatus, true);
                 $order->addStatusToHistory($order->getStatus(), 'Order processed successfully by Skyhub');
-                $order->save(); 
+                $order->save();
 
                 if($this->_newCustomer)
                 {
@@ -82,24 +102,52 @@ class Create extends AbstractImportCron
                 }
             }
             return true;
-        } catch(\Exception $e) {
+        }
+        catch(\Exception $e)
+        {
             echo 'Error: '. $e->getMessage() . PHP_EOL;
             $this->logger->critical($e);
         }
         return false;
     }
 
+    private function createCart()
+    {
+        $this->cartManagementInterface = $this->_objectManager->get('\Magento\Quote\Api\CartManagementInterface');
+        $this->cartRepogitoryInterface = $this->_objectManager->get('\Magento\Quote\Api\CartRepositoryInterface');
+
+        $cart_id = $this->cartManagementInterface->createEmptyCart();
+        return $this->cartRepogitoryInterface->get($cart_id);
+
+    }
+
     private function addItems($items)
     {
         $product = $this->_objectManager->get('\Magento\Catalog\Model\ProductRepository');
-        foreach($items as $item){
+        foreach($items as $item)
+        {
             $product = $product->get($item['product_id']);
-            $product->setPrice($item['original_price']);
-            $this->_quote->addProduct(
+            $this->addPriceDiff($item, $product);
+
+            $this->_cart->addProduct(
                 $product,
                 intval($item['qty'])
             );
         }
+    }
+
+    private function addPriceDiff($item , $product)
+    {
+        $this->_priceDiff = $this->_priceDiff ? $this->_priceDiff : 0; 
+        
+        $itemPrice = isset($item['special_price']) && $item['special_price'] > 0 && $item['original_price'] > $item['special_price'] 
+            ? $item['special_price'] : $item['original_price'];
+
+        $prices = $this->helper->getPricesProduct( $product );
+        $productPrice = isset($prices['finalPrice']) && $prices['finalPrice'] > 0 && $prices['price'] > $prices['finalPrice'] 
+        ? $prices['finalPrice'] : $prices['price'];
+        
+        $this->_priceDiff += ($itemPrice - $productPrice);
     }
 
     private function setAddress($address)
@@ -111,8 +159,8 @@ class Create extends AbstractImportCron
         $address['fax']        = $address['secondary_phone'];
         $address['country_id'] = $address['country'];
 
-        $this->_quote->getBillingAddress()->addData($address);
-        $this->_quote->getShippingAddress()->addData($address);
+        $this->_cart->getBillingAddress()->addData($address);
+        $this->_cart->getShippingAddress()->addData($address);
     }
 
     private function getCustomer($customerData)
@@ -130,8 +178,11 @@ class Create extends AbstractImportCron
         {
             $customer = $collection->getFirstItem();
             return $customer;
-        } else {
-            try{
+        }
+        else
+        {
+            try
+            {
                 $websiteId  = $this->_storeManager->getWebsite()->getWebsiteId();
 
                 $customer = $customerFactory->create();
@@ -155,7 +206,9 @@ class Create extends AbstractImportCron
                     $customer->save();
                 }
                 return $customer;
-            } catch(\Exception $e) {
+            }
+            catch(\Exception $e)
+            {
                 echo 'Error! '. PHP_EOL;
                 print_r($e->getMessage());
                 $this->logger->critical($e);
@@ -167,7 +220,8 @@ class Create extends AbstractImportCron
     {
         $status = $orderData['status']['type'];
 
-        switch ($status) {
+        switch ($status)
+        {
             case 'NEW':
                 return Order::STATE_PENDING_PAYMENT;   
                 break;
