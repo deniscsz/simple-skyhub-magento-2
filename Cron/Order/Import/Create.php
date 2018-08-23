@@ -27,8 +27,8 @@ class Create extends AbstractImportCron
             }
             else
             {
-                $store     = $this->_storeManager->getStore();
-                $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+                $storeId   = $this->helper->getCartStore();
+                $store     = $this->_storeManager->getStore($storeId);
 
                 $customer = $this->getCustomer($orderData['customer']);
                 if(!$customer)
@@ -66,12 +66,11 @@ class Create extends AbstractImportCron
                     ->collectShippingRates()
                     ->setShippingMethod('marketplace_marketplace'); //shipping method                    
 
-                /**
-                 * @todo payment method
-                 */
-                $this->_cart->setPaymentMethod('marketplace_boleto');
-                $this->_cart->setInventoryProcessed(false);
-                $this->_cart->getPayment()->importData(['method' => 'marketplace_boleto']);
+
+                $paymentMethod = $this->getPaymentMethod($orderData['payments']);                
+                $this->_cart->setPaymentMethod($paymentMethod);
+                $this->_cart->setInventoryProcessed($this->helper->getInventoryProcessed());
+                $this->_cart->getPayment()->importData(['method' => $paymentMethod]);
 
                 $this->_cart->collectTotals();
                 $this->_cart->save();
@@ -124,9 +123,10 @@ class Create extends AbstractImportCron
     private function addItems($items)
     {
         $product = $this->_objectManager->get('\Magento\Catalog\Model\ProductRepository');
+        $storeId   = $this->helper->getCartStore();
         foreach($items as $item)
         {
-            $product = $product->get($item['product_id']);
+            $product = $product->get($item['product_id'], false, $storeId);
             $this->addPriceDiff($item, $product);
 
             $this->_cart->addProduct(
@@ -183,7 +183,8 @@ class Create extends AbstractImportCron
         {
             try
             {
-                $websiteId  = $this->_storeManager->getWebsite()->getWebsiteId();
+                $storeId   = $this->helper->getCartStore();
+                $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
 
                 $customer = $customerFactory->create();
                 $customer->setWebsiteId($websiteId);
@@ -218,31 +219,66 @@ class Create extends AbstractImportCron
 
     private function getOrderStatus($orderData)
     {
-        $status = $orderData['status']['type'];
+        $status = strtolower($orderData['status']['type']);
 
         switch ($status)
         {
-            case 'NEW':
-                return Order::STATE_PENDING_PAYMENT;   
+            case 'new':
+                return $this->helper->getStatusPending();   
                 break;
 
-            case 'SHIPPED':
-            case 'APPROVED':
-                return Order::STATE_PROCESSING;   
+            case 'shipped':
+                return $this->helper->getStatusShipmed();   
+                break;
+
+            case 'approved':
+                return $this->helper->getStatusInvoiced();   
                 break;
             
-            case 'DELIVERED':
-                return Order::STATE_COMPLETE;   
+            case 'delivered':
+                return $this->helper->getStatusDelivered();   
                 break;
             
-            case 'CANCELED':
-                return Order::STATE_CANCELED;   
+            case 'canceled':
+                return $this->helper->getStatusCanceled();   
+                break;
+
+            case 'refunded':
+                return $this->helper->getStatusRefunded();   
                 break;
 
             default:
-                return Order::STATE_PENDING_PAYMENT;    
+                return $this->helper->getStatusPending();    
                 break;
         }
 
+    }
+    
+    private function getPaymentMethod($payment)
+    {
+        $paymentCode = array_shift($payment)['method'];
+
+        switch (strtolower($paymentCode))
+        {
+            case 'debit_card':
+                return 'marketplace_boleto';   
+                break;
+
+            case 'credit_card':
+                return 'marketplace_cc';   
+                break;
+            
+            case 'boleto':
+                return 'marketplace_boleto';   
+                break;
+            
+            case 'voucher':
+                return 'marketplace_boleto';   
+                break;
+
+            default:
+                return 'marketplace_boleto';    
+                break;
+        } 
     }
 }

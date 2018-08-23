@@ -22,11 +22,14 @@ class ProductSaveAfter extends AbstractObserver
         }
 
         $product = $observer->getData('product');
-        $this->createJob(
-            SkyhubJob::ENTITY_TYPE_CATALOG_PRODUCT_SAVE, 
-            $product->getId()
-        );
-
+        if($product->hasData('skyhub_control') && $product->getData('skyhub_control'))
+        {
+            $this->createJob(
+                SkyhubJob::ENTITY_TYPE_CATALOG_PRODUCT_SAVE, 
+                $product->getId()
+            );
+        }
+       
         return $this;
     }
 }

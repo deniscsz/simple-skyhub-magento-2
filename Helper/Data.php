@@ -14,6 +14,8 @@ class Data extends AbstractHelper
     const XML_SKYHUB_ACTIVED                = "skyhub/options/active";
     const XML_SKYHUB_API_EMAIL              = "skyhub/options/email";
     const XML_SKYHUB_API_KEY                = "skyhub/options/api_key";
+    const XML_SKYHUB_CART_STORE             = "skyhub/options/cart_store";
+    const XML_SKYHUB_INVENTORY_PROCESSED    = "skyhub/options/inventory_processed";
     const XML_SKYHUB_STATUS_PENDING         = "skyhub/options/status_pending";
     const XML_SKYHUB_STATUS_INVOICED        = "skyhub/options/status_invoiced";
     const XML_SKYHUB_STATUS_CANCELED        = "skyhub/options/status_canceled";
@@ -48,6 +50,14 @@ class Data extends AbstractHelper
         return $this->getConfig(self::XML_SKYHUB_API_EMAIL);
     }
 
+    public function getCartStore()
+    {
+        return $this->getConfig(self::XML_SKYHUB_CART_STORE);
+    }
+    public function getInventoryProcessed()
+    {
+        return $this->getConfig(self::XML_SKYHUB_INVENTORY_PROCESSED);
+    }
     public function getStatusPending()
     {
         return $this->getConfig(self::XML_SKYHUB_STATUS_PENDING);

@@ -12,8 +12,10 @@ abstract class AbstractProducCron extends AbstractCatalogCron
     protected function processJob(SkyhubJob $job)
     {
         try{
+            $storeId   = $this->helper->getCartStore();
             $productId = $job->getEntityId();
-            $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class)->load($productId);
+            $product = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class)
+                ->getById($productId, false, $storeId);
 
             $sku            = $product->getSku();
             $attributes     = $this->getAttributes($product);
@@ -33,6 +35,13 @@ abstract class AbstractProducCron extends AbstractCatalogCron
             
             if ($response->success())
             {
+                if( !$product->hasData('skyhub_control') )
+                {
+                    echo 'Set up skyhub_control!' . PHP_EOL;
+                    $action = $this->_objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Action::class);
+                    $action->updateAttributes([$product->getId()], ['skyhub_control' => 1], $storeId);    
+                }
+
                 echo 'Product Imported: '. $sku . PHP_EOL;
             }
         } catch (\Exception $e){

@@ -21,12 +21,24 @@ class StockItemSaveAfter extends AbstractObserver
             return $this;
         }
 
-        $stockItem = $observer->getData('item');
-        $this->createJob(
-            SkyhubJob::ENTITY_TYPE_CATALOGINVENTORY_STOCK_ITEM_SAVE, 
-            $stockItem->getData('product_id')
-        );
+        if($observer->hasData('item'))
+        {
+            $stockItem = $observer->getData('item');
+            $productId = $stockItem->getData('product_id');
+            $storeId   = $this->helper->getCartStore();
+            
+            $skyhubControl   = $this->_objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class)
+                ->getAttributeRawValue($productId, 'skyhub_control', $storeId);
 
+            if($skyhubControl)
+            {
+                $this->createJob(
+                    SkyhubJob::ENTITY_TYPE_CATALOGINVENTORY_STOCK_ITEM_SAVE, 
+                    $productId
+                );
+            }
+        }
+        
         return $this;
     }
 }

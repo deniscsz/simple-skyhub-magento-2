@@ -15,14 +15,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectmanager
     ) {
-        $this->_objectManager = $objectmanager;
+        $this->_objectManager   = $objectmanager;
     }
 
     public function upgrade(
         SchemaSetupInterface $setup,
         ModuleContextInterface $context
     ) {
-        $installer = $setup;
+        $installer = $setup;    
         $installer->startSetup();
 
         if (version_compare($context->getVersion(), '1.0.1') < 0)
