@@ -96,14 +96,14 @@ abstract class AbstractProducCron extends AbstractCatalogCron
         $response = array();
         if($product->hasData('media_gallery'))
         {
-            $gallery = $product->getData('media_gallery');
-            $images = $gallery['images'];
-
+            $gallery  = $product->getData('media_gallery');
+            $images   = $gallery['images'];
+            $mediaUrl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, true);
             if(count($images))
             {
                 foreach($images as $image)
                 {
-                    $response[] = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) ."catalog/product". $image['file'];
+                    $response[] =  $mediaUrl."catalog/product". $image['file'];
                 }
             }
         }
