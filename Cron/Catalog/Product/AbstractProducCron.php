@@ -17,6 +17,11 @@ abstract class AbstractProducCron extends AbstractCatalogCron
             $product = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class)
                 ->getById($productId, false, $storeId);
 
+            if(!$product->getId())
+            {
+                return false;
+            }
+            
             $sku            = $product->getSku();
             $attributes     = $this->getAttributes($product);
             $images         = $this->getImages($product);
@@ -45,7 +50,10 @@ abstract class AbstractProducCron extends AbstractCatalogCron
                 echo 'Product Imported: '. $sku . PHP_EOL;
             }
         } catch (\Exception $e){
-            echo PHP_EOL . 'Error: '. $sku . PHP_EOL;
+            if($sku)
+            {
+                echo PHP_EOL . 'Error: '. $sku . PHP_EOL;
+            }
             print_r($e->getMessage());
             echo PHP_EOL;
             $this->logger->critical($e);
@@ -148,15 +156,8 @@ abstract class AbstractProducCron extends AbstractCatalogCron
             $response['qty']               = $StockState->getStockQty($product->getId(), $product->getStore()->getWebsiteId());
                      
             $prices                        = $this->helper->getPricesProduct( $product );
-            $response['price']             = $prices['price'];
-            if($product->getTypeId() == 'bundle')
-            {
-                $response['promotional_price'] = $prices['price'];
-            }
-            else
-            {
-                $response['promotional_price'] = $prices['finalPrice'];
-            }
+            $response['price']             = $prices['price'] > 0.1 ? $prices['price'] : $prices['finalPrice'];
+            $response['promotional_price'] = $prices['finalPrice'];
         }
         return $response;
     }
