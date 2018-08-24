@@ -36,6 +36,8 @@
 				<active/>
 				<email/>
 				<api_key/>
+				<cart_store/>
+				<inventory_processed>0</inventory_processed>
 				<status_pending/>
 				<status_invoiced/>
 				<status_canceled/>
