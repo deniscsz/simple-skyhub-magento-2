@@ -37,7 +37,7 @@
 				<email/>
 				<api_key/>
 				<cart_store/>
-				<delete_customer>1<delete_customer/>
+				<delete_customer>1</delete_customer>
 				<inventory_processed>0</inventory_processed>
 				<status_pending/>
 				<status_invoiced/>
