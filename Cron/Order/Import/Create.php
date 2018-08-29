@@ -227,7 +227,7 @@ class Create extends AbstractImportCron
                 return 1;
                 break;
             
-            case 'femalemale':
+            case 'female':
                 return 2;
                 break;
 
