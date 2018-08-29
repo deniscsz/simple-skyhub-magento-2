@@ -86,7 +86,7 @@ class Create extends AbstractImportCron
 
             if($order->getEntityId())
             {
-                echo '['.$order_id.'] '.'Imported ' . $orderData['code'] . PHP_EOL;
+                echo '['.$order->getEntityId().'] '.'Imported ' . $orderData['code'] . PHP_EOL;
                 
                 $orderStatus = $this->getOrderStatus($orderData);
 
@@ -124,6 +124,7 @@ class Create extends AbstractImportCron
     {
         $product = $this->_objectManager->get('\Magento\Catalog\Model\ProductRepository');
         $storeId   = $this->helper->getCartStore();
+        $this->_priceDiff = 0;
         foreach($items as $item)
         {
             $product = $product->get($item['product_id'], false, $storeId);
@@ -203,7 +204,8 @@ class Create extends AbstractImportCron
                     $customer->setTaxvat( $cpf );
                     $customer->setDob( $customerData['date_of_birth'] );
                     $customer->setPassword( "123456789password" );
-        
+                    $customer->setGender($this->getGender($customerData));
+
                     $customer->save();
                 }
                 return $customer;
@@ -215,6 +217,24 @@ class Create extends AbstractImportCron
                 $this->logger->critical($e);
             }
         }              
+    }
+    
+    private function getGender($customerData)
+    {
+        switch ($customerData['gender'])
+        {
+            case 'male':
+                return 1;
+                break;
+            
+            case 'femalemale':
+                return 2;
+                break;
+
+            default:
+                return 3;
+                break;
+        }
     }
 
     private function getOrderStatus($orderData)
