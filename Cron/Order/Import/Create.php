@@ -95,7 +95,7 @@ class Create extends AbstractImportCron
                 $order->addStatusToHistory($order->getStatus(), 'Order processed successfully by Skyhub');
                 $order->save();
 
-                if($this->_newCustomer)
+                if($this->helper->getDeleteCustomer() && $this->_newCustomer)
                 {
                     $customer->delete();
                 }

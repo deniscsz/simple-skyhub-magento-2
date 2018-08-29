@@ -120,6 +120,11 @@
 					<comment>Loja que será integrada com a Skyhub.</comment>
 					<source_model>Magento\Config\Model\Config\Source\Store</source_model>
 				</field>
+				<field id="delete_customer" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1" translate="label" type="select">
+					<label>Deletar Cliente</label>
+					<comment>Deleta cliente após fazer a integração</comment>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
 
 				<!-- Feature 
 				<field id="inventory_processed" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select">
