@@ -45,7 +45,7 @@ class Create extends AbstractImportCron
                 $this->_cart->assignCustomer($customer);
 
                 $this->addItems($orderData['items']);
-                $this->_priceDiff = round($this->_priceDiff, 2);
+                $this->_priceDiff = $this->_priceDiff;
                 if($this->_registry->registry('skyhub_tax') !== false)
                 {
                     $this->_registry->unregister('skyhub_tax');
@@ -122,12 +122,13 @@ class Create extends AbstractImportCron
 
     private function addItems($items)
     {
-        $product = $this->_objectManager->get('\Magento\Catalog\Model\ProductRepository');
         $storeId   = $this->helper->getCartStore();
         $this->_priceDiff = 0;
         foreach($items as $item)
         {
-            $product = $product->get($item['product_id'], false, $storeId);
+            $product = $this->_objectManager->get('\Magento\Catalog\Model\ProductRepository')
+                ->get($item['product_id'], false, $storeId);
+                
             $this->addPriceDiff($item, $product);
 
             $this->_cart->addProduct(
@@ -148,7 +149,7 @@ class Create extends AbstractImportCron
         $productPrice = isset($prices['finalPrice']) && $prices['finalPrice'] > 0 && $prices['price'] > $prices['finalPrice'] 
         ? $prices['finalPrice'] : $prices['price'];
         
-        $this->_priceDiff += ($itemPrice - $productPrice);
+        $this->_priceDiff += (( $itemPrice - ( intval(($productPrice*100))/100 ) )*$item['qty']);
     }
 
     private function setAddress($address)
