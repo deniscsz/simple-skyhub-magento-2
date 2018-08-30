@@ -129,7 +129,7 @@ abstract class AbstractProducCron extends AbstractCatalogCron
             $attrCode = $attr->getAttributeCode();
             if(in_array($attrCode, $attributesToSync) && $product->hasData($attrCode))
             {
-                if( !is_array( $product->getData($attrCode) ) )
+                if( !is_array( $product->getData($attrCode) ) && $product->getData($attrCode) !== null )
                 {
                     $value = $attr->getFrontend()->getValue($product);
                     if ($value instanceof Phrase) {
@@ -156,7 +156,7 @@ abstract class AbstractProducCron extends AbstractCatalogCron
             $response['qty']               = $StockState->getStockQty($product->getId(), $product->getStore()->getWebsiteId());
                      
             $prices                        = $this->helper->getPricesProduct( $product );
-            $response['price']             = $prices['price'] > 0.1 ? $prices['price'] : $prices['finalPrice'];
+            $response['price']             = $prices['price'];
             $response['promotional_price'] = $prices['finalPrice'];
         }
         return $response;
