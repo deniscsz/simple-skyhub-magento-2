@@ -148,8 +148,19 @@ class Create extends AbstractImportCron
         $prices = $this->helper->getPricesProduct( $product );
         $productPrice = isset($prices['finalPrice']) && $prices['finalPrice'] > 0 && $prices['price'] > $prices['finalPrice'] 
         ? $prices['finalPrice'] : $prices['price'];
-        
-        $this->_priceDiff += (( $itemPrice - ( intval(($productPrice*100))/100 ) )*$item['qty']);
+
+        $productPrice    = ( intval( ( $productPrice * 100 ) ) / 100 );
+        $productDiscount = ( $itemPrice - $productPrice );
+        if( $productDiscount != 0 )
+        {
+            $percentDiscount = ( $productPrice / ( $productDiscount * 100 ) );
+            $percentDiscount = $percentDiscount > 0 ? $percentDiscount : ( $percentDiscount * ( -1 ) );
+            if( $percentDiscount > ( (float) $this->helper->getMaxDiff() ) )
+            {
+                throw new \Exception("Discount not allowed!");
+            }
+        }
+        $this->_priceDiff += ( $productDiscount * $item['qty'] );
     }
 
     private function setAddress($address)

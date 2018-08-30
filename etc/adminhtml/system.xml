@@ -125,7 +125,10 @@
 					<comment>Deleta cliente após fazer a integração</comment>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
-
+				<field id="max_diff" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="text">
+					<label>Diferença Máxima</label>
+					<comment>Diferença máxima de preço por produto. Ex.: 0.1 para 10%</comment>
+				</field>
 				<!-- Feature 
 				<field id="inventory_processed" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select">
 					<label>Processar Estoque</label>

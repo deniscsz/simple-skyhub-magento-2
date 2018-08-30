@@ -16,6 +16,7 @@ class Data extends AbstractHelper
     const XML_SKYHUB_API_KEY                = "skyhub/options/api_key";
     const XML_SKYHUB_CART_STORE             = "skyhub/options/cart_store";
     const XML_SKYHUB_DELETE_CUSTOMER        = "skyhub/options/delete_customer";
+    const XML_SKYHUB_MAX_DIFF               = "skyhub/options/max_diff";
     const XML_SKYHUB_INVENTORY_PROCESSED    = "skyhub/options/inventory_processed";
     const XML_SKYHUB_STATUS_PENDING         = "skyhub/options/status_pending";
     const XML_SKYHUB_STATUS_INVOICED        = "skyhub/options/status_invoiced";
@@ -59,6 +60,11 @@ class Data extends AbstractHelper
     public function getDeleteCustomer()
     {
         return $this->getConfig(self::XML_SKYHUB_DELETE_CUSTOMER);
+    }
+    
+    public function getMaxDiff()
+    {
+        return $this->getConfig(self::XML_SKYHUB_MAX_DIFF);
     }
 
     public function getInventoryProcessed()

@@ -38,6 +38,7 @@
 				<api_key/>
 				<cart_store/>
 				<delete_customer>1</delete_customer>
+				<max_diff/>
 				<inventory_processed>0</inventory_processed>
 				<status_pending/>
 				<status_invoiced/>
